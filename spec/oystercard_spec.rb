@@ -36,5 +36,33 @@ describe Oystercard do
 
   end
 
+  describe 'journey' do
+
+    it 'initially not in a journey' do
+      expect(oyster).not_to be_in_journey
+    end
+
+    describe '#touch_in' do
+
+      it 'card responds to touch in method' do
+        expect(oyster).to respond_to(:touch_in)
+      end
+      it 'changes in_journey status to true' do
+        oyster.touch_in
+        expect(oyster).to be_in_journey
+      end
+
+    end
+
+    describe '#touch_out' do
+
+      it 'changes in_journey status from true to false' do
+        oyster.touch_in
+        oyster.touch_out
+        expect(oyster).not_to be_in_journey
+      end
+    end
+
+  end
 
 end
