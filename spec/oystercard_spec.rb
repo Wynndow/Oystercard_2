@@ -3,6 +3,8 @@ require 'oystercard.rb'
 describe Oystercard do
 
   subject(:oyster) {described_class.new}
+  let(:entry_station) {double(:station)}
+
   max_bal = Oystercard::MAX_LIMIT
   min_fare = Oystercard::MIN_FARE
 
@@ -25,15 +27,6 @@ describe Oystercard do
 
     end
 
-    describe '#deduct' do
-
-      it 'removes the minimum fare from the balance' do
-        oyster.top_up(max_bal)
-        expect{oyster.deduct(min_fare)}.to change{oyster.balance}.by(-min_fare)
-      end
-
-    end
-
   end
 
   describe 'journey' do
@@ -45,27 +38,41 @@ describe Oystercard do
     describe '#touch_in' do
 
       it 'card responds to touch in method' do
-        expect(oyster).to respond_to(:touch_in)
+        expect(oyster).to respond_to(:touch_in).with(1).argument
       end
       it 'changes in_journey status to true' do
         oyster.top_up(min_fare)
-        oyster.touch_in
+        oyster.touch_in(entry_station)
         expect(oyster).to be_in_journey
       end
       it 'raises error it balance is less than mimimum fare' do
         message = "Cannot touch in: insufficient funds"
-        expect{oyster.touch_in}.to raise_error(message)
+        expect{oyster.touch_in(entry_station)}.to raise_error(message)
+      end
+      it 'records entry station' do
+        oyster.top_up(min_fare)
+        oyster.touch_in(entry_station)
+        expect(oyster.current_journey.first).to eq(entry_station)
       end
 
     end
 
     describe '#touch_out' do
+      before do
+        oyster.top_up(min_fare)
+        oyster.touch_in(entry_station)
+      end
 
       it 'changes in_journey status from true to false' do
-        oyster.top_up(min_fare)
-        oyster.touch_in
         oyster.touch_out
         expect(oyster).not_to be_in_journey
+      end
+      it 'charges min fare' do
+        expect{oyster.touch_out}.to change{oyster.balance}.by(-min_fare)
+      end
+      it 'resets current journey' do
+        oyster.touch_out
+        expect(oyster.current_journey).to eq []
       end
     end
 
