@@ -48,8 +48,13 @@ describe Oystercard do
         expect(oyster).to respond_to(:touch_in)
       end
       it 'changes in_journey status to true' do
+        oyster.top_up(min_fare)
         oyster.touch_in
         expect(oyster).to be_in_journey
+      end
+      it 'raises error it balance is less than mimimum fare' do
+        message = "Cannot touch in: insufficient funds"
+        expect{oyster.touch_in}.to raise_error(message)
       end
 
     end
@@ -57,6 +62,7 @@ describe Oystercard do
     describe '#touch_out' do
 
       it 'changes in_journey status from true to false' do
+        oyster.top_up(min_fare)
         oyster.touch_in
         oyster.touch_out
         expect(oyster).not_to be_in_journey

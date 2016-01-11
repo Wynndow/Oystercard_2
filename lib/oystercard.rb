@@ -24,6 +24,7 @@ class Oystercard
   end
 
   def touch_in
+    raise("Cannot touch in: insufficient funds") if insufficient_funds?
     @in_journey = true
   end
 
@@ -35,6 +36,10 @@ private
 
   def over_limit?(amount)
     (@balance + amount) > MAX_LIMIT
+  end
+
+  def insufficient_funds?
+    balance < MIN_FARE
   end
 
 end
