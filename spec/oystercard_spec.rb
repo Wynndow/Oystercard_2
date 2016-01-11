@@ -50,11 +50,7 @@ describe Oystercard do
         message = "Cannot touch in: insufficient funds"
         expect{oyster.touch_in(entry_station)}.to raise_error(message)
       end
-      it 'records entry station' do
-        oyster.top_up(min_fare)
-        oyster.touch_in(entry_station)
-        expect(oyster.current_journey[:entry_station]).to eq(entry_station)
-      end
+
 
     end
 
@@ -71,24 +67,10 @@ describe Oystercard do
       it 'charges min fare' do
         expect{oyster.touch_out(exit_station)}.to change{oyster.balance}.by(-min_fare)
       end
-      it 'resets current journey' do
-        oyster.touch_out(exit_station)
-        expect(oyster.current_journey).to eq({})
-      end
+
     end
 
-    describe '#journey_log' do
-      it 'is empty by default' do
-        expect(oyster.journey_log).to be_empty
-      end
-      it 'stores a complete journey on touch out' do
-        oyster.top_up(min_fare)
-        oyster.touch_in(entry_station)
-        oyster.touch_out(exit_station)
-        expect(oyster.journey_log).to include({entry_station: entry_station,
-                                               exit_station: exit_station})
-      end
-    end
+
 
   end
 
