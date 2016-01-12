@@ -46,6 +46,7 @@ describe Oystercard do
       end
       it 'calls journey.touch_in' do
         allow(journey).to receive(:touch_in)
+        allow(journey).to receive(:fare).and_return(1)
         oyster.top_up(journey.min_fare)
         oyster.touch_in(entry_station)
         expect(journey).to have_received(:touch_in)
@@ -62,6 +63,7 @@ describe Oystercard do
       before do
         allow(journey).to receive(:touch_in)
         allow(journey).to receive(:touch_out)
+        allow(journey).to receive(:fare).and_return(1)
         oyster.top_up(journey.min_fare)
         oyster.touch_in(entry_station)
       end

@@ -25,11 +25,12 @@ class Oystercard
   def touch_in(entry_station)
     raise("Cannot touch in: insufficient funds") if insufficient_funds?
     journey.touch_in(entry_station)
+    deduct(journey.fare)
   end
 
   def touch_out(exit_station)
     journey.touch_out(exit_station)
-    deduct(journey.min_fare)
+    deduct(journey.fare)
   end
 
 private

@@ -32,4 +32,25 @@ describe Journey do
 
   end
 
+  describe '#fare' do
+
+    it 'charges penalty fare if user touches out with no entry station' do
+      journey.touch_out(exit_station)
+      expect(journey.fare).to eq(7)
+    end
+
+    it 'charges penalty fare if user touches in with no exit station' do
+      journey.touch_in(entry_station)
+      journey.touch_in(entry_station)
+      expect(journey.fare).to eq(7)
+    end
+
+    it 'charges penalty fare if user touches in with no exit station' do
+      journey.touch_in(entry_station)
+      journey.touch_out(exit_station)
+      expect(journey.fare).to eq(1)
+    end
+
+  end
+
 end
