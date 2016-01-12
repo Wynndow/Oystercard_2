@@ -31,8 +31,8 @@ class Journey
   def fare
     total = 0
     unless @journey_log.empty?
-    total += (PENALTY_FARE + MIN_FARE) if journey_log[-1][:exit_station] == nil # No touch out last journey (applies on touch in)
-    total += PENALTY_FARE if journey_log[-1][:entry_station] == nil # No touch in on current journey (applies on touch out)
+      total += (PENALTY_FARE + MIN_FARE) if journey_log[-1][:exit_station] == nil # No touch out last journey (applies on touch in)
+      total += PENALTY_FARE if journey_log[-1][:entry_station] == nil # No touch in on current journey (applies on touch out)
     end
     total += MIN_FARE if  @current_journey.empty? #Applies on touch out (current journey has just been logged.)
     return total
