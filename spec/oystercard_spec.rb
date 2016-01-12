@@ -5,10 +5,9 @@ describe Oystercard do
   subject(:oyster) {described_class.new(journey)}
   let(:entry_station) {double(:station)}
   let(:exit_station) {double(:station)}
-  let(:journey) {double(:journey)}
+  let(:journey) {double(:journey, :min_fare => 1)}
 
   max_bal = Oystercard::MAX_LIMIT
-  min_fare = Oystercard::MIN_FARE
 
   describe 'Balance' do
 
@@ -47,7 +46,7 @@ describe Oystercard do
       end
       it 'calls journey.touch_in' do
         allow(journey).to receive(:touch_in)
-        oyster.top_up(min_fare)
+        oyster.top_up(journey.min_fare)
         oyster.touch_in(entry_station)
         expect(journey).to have_received(:touch_in)
       end
@@ -63,7 +62,7 @@ describe Oystercard do
       before do
         allow(journey).to receive(:touch_in)
         allow(journey).to receive(:touch_out)
-        oyster.top_up(min_fare)
+        oyster.top_up(journey.min_fare)
         oyster.touch_in(entry_station)
       end
 
@@ -72,7 +71,7 @@ describe Oystercard do
         expect(journey).to have_received(:touch_out)
       end
       it 'charges min fare' do
-        expect{oyster.touch_out(exit_station)}.to change{oyster.balance}.by(-min_fare)
+        expect{oyster.touch_out(exit_station)}.to change{oyster.balance}.by(-journey.min_fare)
       end
 
     end

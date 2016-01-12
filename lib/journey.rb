@@ -1,5 +1,7 @@
 class Journey
 
+  MIN_FARE = 1
+
   attr :current_journey, :journey_log
 
   def initialize
@@ -16,14 +18,13 @@ class Journey
   end
 
   def touch_out(exit_station)
-
     @current_journey[:exit_station] = exit_station
     @journey_log << current_journey
     @current_journey = {}
   end
 
-  private
-
-
+  def min_fare
+    MIN_FARE
+  end
 
 end

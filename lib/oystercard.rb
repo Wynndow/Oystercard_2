@@ -3,7 +3,6 @@ require_relative 'journey'
 class Oystercard
 
   MAX_LIMIT = 90
-  MIN_FARE = 1
 
   attr_reader :balance, :journey
 
@@ -30,7 +29,7 @@ class Oystercard
 
   def touch_out(exit_station)
     journey.touch_out(exit_station)
-    deduct(MIN_FARE)
+    deduct(journey.min_fare)
   end
 
 private
@@ -44,7 +43,7 @@ private
   end
 
   def insufficient_funds?
-    balance < MIN_FARE
+    balance < journey.min_fare
   end
 
 end
