@@ -11,5 +11,9 @@ class JourneyLog
   def end_journey(exit_station)
     @journey_log.last.touch_out(exit_station)
   end
-  
+
+  def fare
+
+  end
+
 end
